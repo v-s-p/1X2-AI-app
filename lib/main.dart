@@ -798,51 +798,84 @@ class _ProfileOption extends StatelessWidget {
   }
 }
 
-// --- VERİ MODELİ ---
+// --- VERİ MODELİ (GÜNCEL 25. HAFTA) ---
 
 class DemoData {
+  // Ana sayfada "Gelecek Maçlar" kısmında görünecek öne çıkan analizler
   static final List<MatchPrediction> upcomingMatches = [
-    MatchPrediction(time: '19 Oca, 20:00', league: 'Süper Lig', homeTeam: 'Göztepe', awayTeam: 'Fatih Karagümrük', confidence: 0.75),
-    MatchPrediction(time: '19 Oca, 20:00', league: '1. Lig', homeTeam: 'Gençlerbirliği', awayTeam: 'Gaziantep FK', confidence: 0.68),
+    MatchPrediction(
+      time: '25 Oca, 19:00', 
+      league: 'Süper Lig', 
+      homeTeam: 'Galatasaray', 
+      awayTeam: 'Kayserispor', 
+      confidence: 0.92
+    ),
+    MatchPrediction(
+      time: '24 Oca, 20:00', 
+      league: 'Süper Lig', 
+      homeTeam: 'Beşiktaş', 
+      awayTeam: 'Konyaspor', 
+      confidence: 0.78
+    ),
+    MatchPrediction(
+      time: '25 Oca, 16:00', 
+      league: 'Süper Lig', 
+      homeTeam: 'Göztepe', 
+      awayTeam: 'Fatih Karagümrük', 
+      confidence: 0.74
+    ),
   ];
 
+  // Spor Toto 15 Maçlık Tam Liste - 25. Hafta
   static final List<CouponMatch> couponMatches = [
-    CouponMatch(index: 1, homeTeam: 'Göztepe', awayTeam: 'Karagümrük', prediction: '1', isLocked: false),
-    CouponMatch(index: 2, homeTeam: 'Gençlerbirliği', awayTeam: 'Gaziantep FK', prediction: '2', isLocked: false),
-    CouponMatch(index: 3, homeTeam: 'Kocaelispor', awayTeam: 'Fenerbahçe', prediction: '2', isLocked: true),
-    CouponMatch(index: 4, homeTeam: 'Rams Başakşehir', awayTeam: 'Rizespor', prediction: '1', isLocked: true),
-    CouponMatch(index: 5, homeTeam: 'Galatasaray', awayTeam: 'Kayserispor', prediction: '1', isLocked: true),
+    CouponMatch(index: 1, homeTeam: 'Göztepe', awayTeam: 'Fatih Karagümrük', prediction: '1', isLocked: false),
+    CouponMatch(index: 2, homeTeam: 'Galatasaray', awayTeam: 'Kayserispor', prediction: '1', isLocked: false),
+    CouponMatch(index: 3, homeTeam: 'Gençlerbirliği', awayTeam: 'Gaziantep FK', prediction: '2', isLocked: true),
+    CouponMatch(index: 4, homeTeam: 'Kocaelispor', awayTeam: 'Fenerbahçe', prediction: '2', isLocked: true),
+    CouponMatch(index: 5, homeTeam: 'Rams Başakşehir', awayTeam: 'Çaykur Rizespor', prediction: '1', isLocked: true),
     CouponMatch(index: 6, homeTeam: 'Kasımpaşa', awayTeam: 'Samsunspor', prediction: '1', isLocked: true),
     CouponMatch(index: 7, homeTeam: 'Alanyaspor', awayTeam: 'Eyüpspor', prediction: 'X', isLocked: true),
     CouponMatch(index: 8, homeTeam: 'Beşiktaş', awayTeam: 'Konyaspor', prediction: '1', isLocked: true),
     CouponMatch(index: 9, homeTeam: 'Antalyaspor', awayTeam: 'Trabzonspor', prediction: 'X', isLocked: true),
-    CouponMatch(index: 10, homeTeam: 'Tottenham', awayTeam: 'Man. City', prediction: '2', isLocked: true),
-    CouponMatch(index: 11, homeTeam: 'Real Madrid', awayTeam: 'Vallecano', prediction: '1', isLocked: true),
-    CouponMatch(index: 12, homeTeam: 'Athletic Club', awayTeam: 'Sociedad', prediction: 'X', isLocked: true),
+    CouponMatch(index: 10, homeTeam: 'Tottenham', awayTeam: 'Manchester City', prediction: '2', isLocked: true),
+    CouponMatch(index: 11, homeTeam: 'Real Madrid', awayTeam: 'Rayo Vallecano', prediction: '1', isLocked: true),
+    CouponMatch(index: 12, homeTeam: 'Athletic Club', awayTeam: 'Real Sociedad', prediction: 'X', isLocked: true),
     CouponMatch(index: 13, homeTeam: 'Cremonese', awayTeam: 'Inter Milan', prediction: '2', isLocked: true),
     CouponMatch(index: 14, homeTeam: 'Dortmund', awayTeam: 'Heidenheim', prediction: '1', isLocked: true),
     CouponMatch(index: 15, homeTeam: 'PSG', awayTeam: 'Strasbourg', prediction: '1', isLocked: true),
   ];
 
   static const List<String> premiumBenefits = [
-    'Günlük Yapay Zeka Tahminleri',
-    '%75 Üzeri Başarı Oranı',
-    'Detaylı Maç Analizleri',
-    'Tüm Liglere Sınırsız Erişim',
-    'Özel Topluluk Erişimi',
-    'Öncelikli Müşteri Desteği',
+    'Günlük Yapay Zeka Destekli Tahminler',
+    '%75 Üzeri Kanıtlanmış Başarı Oranı',
+    'Detaylı Takım ve Form Analizleri',
+    'Dünya Liglerine Sınırsız Erişim',
+    'Premium Üyelere Özel VIP Topluluk',
+    '7/24 Öncelikli Müşteri Desteği',
   ];
 }
 
 class MatchPrediction {
   final String time, league, homeTeam, awayTeam;
   final double confidence;
-  MatchPrediction({required this.time, required this.league, required this.homeTeam, required this.awayTeam, required this.confidence});
+  MatchPrediction({
+    required this.time, 
+    required this.league, 
+    required this.homeTeam, 
+    required this.awayTeam, 
+    required this.confidence
+  });
 }
 
 class CouponMatch {
   final int index;
   final String homeTeam, awayTeam, prediction;
   final bool isLocked;
-  CouponMatch({required this.index, required this.homeTeam, required this.awayTeam, required this.prediction, required this.isLocked});
+  CouponMatch({
+    required this.index, 
+    required this.homeTeam, 
+    required this.awayTeam, 
+    required this.prediction, 
+    required this.isLocked
+  });
 }
