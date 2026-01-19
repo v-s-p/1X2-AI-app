@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
+import 'dart:convert';
+import 'package:flutter/services.dart';
 
 void main() => runApp(const PredictAIApp());
 
@@ -296,44 +298,59 @@ class CouponPredictionsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final matches = DemoData.couponMatches;
-
     return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+      padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const _TopSearchBar(),
-          const SizedBox(height: 20),
+          const SizedBox(height: 18),
           Text('Spor Toto YZ Tahminleri', style: Theme.of(context).textTheme.headlineLarge),
-          const SizedBox(height: 4),
-          const Text('25. Hafta için 15 maçlık özel kupon.', style: TextStyle(color: Colors.white60)),
-          const SizedBox(height: 20),
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: const Color(0xFF0F172A),
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: Colors.white12),
-            ),
-            child: Column(
-              children: [
-                Row(
+          const SizedBox(height: 18),
+          
+          // GELECEK VERİYİ BEKLEYEN BÖLÜM
+          FutureBuilder<List<CouponMatch>>(
+            future: DemoData.loadMatchesFromJson(), // JSON'u oku
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator(color: Color(0xFFF9D648)));
+              } else if (snapshot.hasError) {
+                return const Center(child: Text('Veri yüklenirken hata oluştu!'));
+              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                return const Center(child: Text('Maç bulunamadı.'));
+              }
+
+              final matches = snapshot.data!;
+
+              return Container(
+                padding: const EdgeInsets.all(18),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF111C3F),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: Colors.white12),
+                ),
+                child: Column(
                   children: [
-                    const Icon(Icons.auto_awesome, color: Color(0xFFF9D648), size: 24),
-                    const SizedBox(width: 10),
-                    Text('Büyük İkramiye Kuponu', style: Theme.of(context).textTheme.headlineMedium),
+                    Row(
+                      children: [
+                        const Icon(Icons.confirmation_number_outlined, color: Color(0xFFF9D648)),
+                        const SizedBox(width: 10),
+                        Text('Jackpot Kuponu - 15 Maç', style: Theme.of(context).textTheme.headlineMedium),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    // JSON'DAN GELEN MAÇLAR BURADA LİSTELENİYOR
+                    ...matches.map((match) => Padding(
+                          padding: const EdgeInsets.only(bottom: 12),
+                          child: CouponMatchRow(match: match),
+                        )),
                   ],
                 ),
-                const SizedBox(height: 20),
-                ...matches.map((match) => Padding(
-                      padding: const EdgeInsets.only(bottom: 10),
-                      child: CouponMatchRow(match: match),
-                    )),
-              ],
-            ),
+              );
+            },
           ),
-          const SizedBox(height: 24),
+          
+          const SizedBox(height: 22),
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
@@ -341,11 +358,10 @@ class CouponPredictionsPage extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFFF9D648),
                 foregroundColor: const Color(0xFF0B1433),
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                elevation: 5,
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
               ),
-              child: const Text('TÜM 15 MAÇLIK KUPONU AÇ', style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 1.1)),
+              child: const Text('15 MAÇLIK KUPONUN TAMAMINI AÇ', style: TextStyle(fontWeight: FontWeight.w700)),
             ),
           ),
         ],
@@ -801,37 +817,26 @@ class _ProfileOption extends StatelessWidget {
 // --- GÜNCEL VERİ MODELİ (25. HAFTA EXCEL LİSTESİ) ---
 
 class DemoData {
-  static final List<MatchPrediction> upcomingMatches = [
-    MatchPrediction(time: '24 Oca, 20:00', league: 'Süper Lig', homeTeam: 'Karagümrük', awayTeam: 'Galatasaray', confidence: 0.88),
-    MatchPrediction(time: '25 Oca, 20:00', league: 'Süper Lig', homeTeam: 'Fenerbahçe', awayTeam: 'Göztepe', confidence: 0.92),
-    MatchPrediction(time: '25 Oca, 19:30', league: 'Premier Lig', homeTeam: 'Arsenal', awayTeam: 'Man. United', confidence: 0.70),
-  ];
-
-  static final List<CouponMatch> couponMatches = [
-    CouponMatch(index: 1, homeTeam: 'Trabzonspor', awayTeam: 'Kasımpaşa', prediction: '1', isLocked: false),
-    CouponMatch(index: 2, homeTeam: 'Kayserispor', awayTeam: 'Başakşehir', prediction: 'X', isLocked: false),
-    CouponMatch(index: 3, homeTeam: 'Samsunspor', awayTeam: 'Kocaelispor', prediction: '1', isLocked: true),
-    CouponMatch(index: 4, homeTeam: 'Karagümrük', awayTeam: 'Galatasaray', prediction: '2', isLocked: true),
-    CouponMatch(index: 5, homeTeam: 'Gaziantep FK', awayTeam: 'Konyaspor', prediction: '1', isLocked: true),
-    CouponMatch(index: 6, homeTeam: 'Antalyaspor', awayTeam: 'Gençlerbirliği', prediction: '1', isLocked: true),
-    CouponMatch(index: 7, homeTeam: 'Rizespor', awayTeam: 'Alanyaspor', prediction: 'X', isLocked: true),
-    CouponMatch(index: 8, homeTeam: 'Fenerbahçe', awayTeam: 'Göztepe', prediction: '1', isLocked: true),
-    CouponMatch(index: 9, homeTeam: 'Eyüpspor', awayTeam: 'Beşiktaş', prediction: '2', isLocked: true),
-    CouponMatch(index: 10, homeTeam: 'Union Berlin', awayTeam: 'Dortmund', prediction: '2', isLocked: true),
-    CouponMatch(index: 11, homeTeam: 'Marsilya', awayTeam: 'Lens', prediction: '1', isLocked: true),
-    CouponMatch(index: 12, homeTeam: 'Arsenal', awayTeam: 'Man. United', prediction: '1', isLocked: true),
-    CouponMatch(index: 13, homeTeam: 'Villarreal', awayTeam: 'Real Madrid', prediction: '2', isLocked: true),
-    CouponMatch(index: 14, homeTeam: 'Juventus', awayTeam: 'Napoli', prediction: 'X', isLocked: true),
-    CouponMatch(index: 15, homeTeam: 'Roma', awayTeam: 'AC Milan', prediction: '2', isLocked: true),
-  ];
+  // JSON dosyasından verileri çeken fonksiyon
+  static Future<List<CouponMatch>> loadMatchesFromJson() async {
+    final String response = await rootBundle.loadString('assets/matches_data.json');
+    final List<dynamic> data = json.decode(response);
+    return data.map((m) => CouponMatch(
+      index: m['id'],
+      homeTeam: m['home'],
+      awayTeam: m['away'],
+      prediction: m['prediction'],
+      isLocked: m['isLocked'],
+    )).toList();
+  }
 
   static const List<String> premiumBenefits = [
-    'Günlük YZ Destekli VIP Tahminler',
-    '%75 Üzeri Kanıtlanmış Başarı',
-    'Detaylı xG ve Form Analizleri',
-    'Tüm Dünya Liglerine Erişim',
-    'Premium Üyelere Özel VIP Topluluk',
-    '7/24 Teknik Destek',
+    'Günlük Yapay Zeka Tahminleri',
+    '%75 Üzeri Başarı Oranı',
+    'Detaylı Maç Analizleri',
+    'Tüm Liglere Sınırsız Erişim',
+    'Özel Topluluk Erişimi',
+    'Öncelikli Müşteri Desteği',
   ];
 }
 
