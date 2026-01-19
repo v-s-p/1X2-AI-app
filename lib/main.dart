@@ -75,7 +75,6 @@ class _MainShellState extends State<MainShell> {
   }
 }
 
-// --- ANA SAYFA ---
 class UpcomingMatchesPage extends StatelessWidget {
   const UpcomingMatchesPage({super.key});
 
@@ -104,7 +103,6 @@ class UpcomingMatchesPage extends StatelessWidget {
   }
 }
 
-// --- TAHMİNLER (SPOR TOTO 15 MAÇ - JSON'DAN OKUR) ---
 class CouponPredictionsPage extends StatelessWidget {
   const CouponPredictionsPage({super.key});
 
@@ -178,8 +176,6 @@ class CouponPredictionsPage extends StatelessWidget {
   }
 }
 
-// --- DİĞER SAYFALAR VE BİLEŞENLER ---
-
 class PremiumPage extends StatelessWidget {
   const PremiumPage({super.key});
   @override
@@ -232,7 +228,7 @@ class MatchCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(match.homeTeam, style: const TextStyle(fontWeight: FontWeight.bold)),
-              const Text('VS', style: TextStyle(color: Color(0xFFF9D648), fontWeight: FontWeight.black)),
+              const Text('VS', style: TextStyle(color: Color(0xFFF9D648), fontWeight: FontWeight.w900)),
               Text(match.awayTeam, style: const TextStyle(fontWeight: FontWeight.bold)),
             ],
           ),
@@ -250,18 +246,23 @@ class CouponMatchRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Text('${match.index}.', style: const TextStyle(color: Color(0xFFF9D648))),
-        const SizedBox(width: 10),
-        Expanded(child: Text('${match.homeTeam} - ${match.awayTeam}', style: const TextStyle(fontSize: 13))),
-        if (match.isLocked) const Icon(Icons.lock_outline, size: 16) else Text(match.prediction, style: const TextStyle(fontWeight: FontWeight.bold)),
-      ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        children: [
+          Text('${match.index}.', style: const TextStyle(color: Color(0xFFF9D648))),
+          const SizedBox(width: 10),
+          Expanded(child: Text('${match.homeTeam} - ${match.awayTeam}', style: const TextStyle(fontSize: 13))),
+          if (match.isLocked) const Icon(Icons.lock_outline, size: 16, color: Colors.white38) else Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+            decoration: BoxDecoration(color: const Color(0xFFF9D648), borderRadius: BorderRadius.circular(4)),
+            child: Text(match.prediction, style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 12)),
+          ),
+        ],
+      ),
     );
   }
 }
-
-// --- VERİ MODELİ ---
 
 class DemoData {
   static final List<MatchPrediction> upcomingMatches = [
@@ -270,15 +271,19 @@ class DemoData {
   ];
 
   static Future<List<CouponMatch>> loadMatchesFromJson() async {
-    final String response = await rootBundle.loadString('assets/matches_data.json');
-    final List<dynamic> data = json.decode(response);
-    return data.map((m) => CouponMatch(
-      index: m['id'],
-      homeTeam: m['home'],
-      awayTeam: m['away'],
-      prediction: m['prediction'],
-      isLocked: m['isLocked'],
-    )).toList();
+    try {
+      final String response = await rootBundle.loadString('assets/matches_data.json');
+      final List<dynamic> data = json.decode(response);
+      return data.map((m) => CouponMatch(
+        index: m['id'],
+        homeTeam: m['home'],
+        awayTeam: m['away'],
+        prediction: m['prediction'],
+        isLocked: m['isLocked'],
+      )).toList();
+    } catch (e) {
+      return [];
+    }
   }
 }
 
