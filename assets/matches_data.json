@@ -1,0 +1,122 @@
+[
+    {
+        "id": 1,
+        "home": "Trabzonspor",
+        "away": "Kasımpaşa",
+        "prediction": "1",
+        "confidence": 0.75,
+        "isLocked": false
+    },
+    {
+        "id": 2,
+        "home": "Zecorner Kayserispor",
+        "away": "Rams Başakşehir",
+        "prediction": "X",
+        "confidence": 0.45,
+        "isLocked": false
+    },
+    {
+        "id": 3,
+        "home": "Samsunspor",
+        "away": "Kocaelispor",
+        "prediction": "X",
+        "confidence": 0.45,
+        "isLocked": true
+    },
+    {
+        "id": 4,
+        "home": "Mısırlı.com.tr Fatih Karagümrük",
+        "away": "Galatasaray",
+        "prediction": "2",
+        "confidence": 0.82,
+        "isLocked": true
+    },
+    {
+        "id": 5,
+        "home": "Gaziantep FK",
+        "away": "Tümosan Konyaspor",
+        "prediction": "X",
+        "confidence": 0.45,
+        "isLocked": true
+    },
+    {
+        "id": 6,
+        "home": "Hesap.com Antalyaspor",
+        "away": "Gençlerbirliği",
+        "prediction": "1",
+        "confidence": 0.75,
+        "isLocked": true
+    },
+    {
+        "id": 7,
+        "home": "Çaykur Rizespor",
+        "away": "Corendon Alanyaspor",
+        "prediction": "X",
+        "confidence": 0.45,
+        "isLocked": true
+    },
+    {
+        "id": 8,
+        "home": "Fenerbahçe",
+        "away": "Göztepe",
+        "prediction": "1",
+        "confidence": 0.9,
+        "isLocked": true
+    },
+    {
+        "id": 9,
+        "home": "ikas Eyüpspor",
+        "away": "Beşiktaş",
+        "prediction": "X",
+        "confidence": 0.45,
+        "isLocked": true
+    },
+    {
+        "id": 10,
+        "home": "Union Berlin",
+        "away": "Borussia Dortmund",
+        "prediction": "2",
+        "confidence": 0.82,
+        "isLocked": true
+    },
+    {
+        "id": 11,
+        "home": "Marsilya",
+        "away": "Lens",
+        "prediction": "X",
+        "confidence": 0.45,
+        "isLocked": true
+    },
+    {
+        "id": 12,
+        "home": "Arsenal",
+        "away": "Manchester United",
+        "prediction": "1",
+        "confidence": 0.9,
+        "isLocked": true
+    },
+    {
+        "id": 13,
+        "home": "Villarreal",
+        "away": "Real Madrid",
+        "prediction": "1",
+        "confidence": 0.9,
+        "isLocked": true
+    },
+    {
+        "id": 14,
+        "home": "Juventus",
+        "away": "Napoli",
+        "prediction": "X",
+        "confidence": 0.45,
+        "isLocked": true
+    },
+    {
+        "id": 15,
+        "home": "Roma",
+        "away": "Milan",
+        "prediction": "2",
+        "confidence": 0.82,
+        "isLocked": true
+    }
+]
