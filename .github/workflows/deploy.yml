@@ -10,6 +10,13 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       
+      # ANDROID İÇİN JAVA KURULUMU ŞART
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
@@ -17,12 +24,11 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
         
-      # ANDROID VE WEB KLASÖRLERİNİ SIFIRDAN YARATIYORUZ
-      - name: Configure Project
-        run: |
-          flutter create . --platforms android,web --force
-          
-      # ANDROID APK OLUŞTURMA
+      # EKSİK ANDROID VE WEB DOSYALARINI OLUŞTURUYORUZ
+      - name: Create Platform Folders
+        run: flutter create . --platforms android,web
+        
+      # ANDROID APK OLUŞTURMA (Debug Modu)
       - name: Build Android APK
         run: flutter build apk --debug
         
@@ -37,10 +43,9 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./build/web
 
-      # APK DOSYASINI GÜÇLÜ BİR ŞEKİLDE UPLOAD ET
+      # APK DOSYASINI YÜKLE
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: predict-ai-android-uygulamasi # İsim çok net olsun
+          name: predict-ai-android-apk
           path: build/app/outputs/flutter-apk/app-debug.apk
-          if-no-files-found: error # Eğer dosya yoksa hata ver ki bilelim
