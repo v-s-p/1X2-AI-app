@@ -1,4 +1,4 @@
-name: Flutter Web Deploy
+name: Predict AI Build and Deploy
 on:
   push:
     branches:
@@ -17,10 +17,14 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
         
-      # KRİTİK ADIM: Eksik olan web dosyalarını robotun kendi içinde yaratmasını sağlıyoruz
-      - name: Configure for Web
-        run: flutter create . --platforms web
+      - name: Configure project
+        run: flutter create . --platforms web,android
         
+      # --- GÜVENLİK ADIMI: KOD KARARTMA İLE APK OLUŞTURMA ---
+      - name: Build Android APK
+        run: flutter build apk --debug # Şimdilik hızlı deneme için debug APK yapıyoruz
+        
+      # --- WEB SİTESİNİ YAYINLA ---
       - name: Build Web
         run: flutter build web --release --base-href "/1X2-AI-app/"
         
@@ -29,3 +33,10 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./build/web
+
+      # --- APK DOSYASINI İNDİRİLEBİLİR YAP ---
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: predict-1x2-ai-app
+          path: build/app/outputs/flutter-apk/app-debug.apk
