@@ -13,7 +13,6 @@ class PredictApp extends StatelessWidget {
   Widget build(BuildContext context) {
     const primaryYellow = Color(0xFFF9D648);
     const background = Color(0xFF020817);
-    const card = Color(0xFF0F172A);
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -24,15 +23,59 @@ class PredictApp extends StatelessWidget {
         colorScheme: const ColorScheme.dark(
           primary: primaryYellow,
           secondary: primaryYellow,
-          surface: card,
+          surface: Color(0xFF0F172A),
         ),
-        appBarTheme: const AppBarTheme(backgroundColor: background, elevation: 0),
       ),
-      home: const MainShell(),
+      // ÖNCE AÇILIŞ EKRANI BAŞLASIN
+      home: const SplashScreen(),
     );
   }
 }
 
+// --- 1. ADIM: SPLASH SCREEN (AÇILIŞ EKRANI) ---
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+  @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // 3 Saniye bekle ve ana sayfaya git
+    Future.delayed(const Duration(seconds: 3), () {
+      if (mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const MainShell()),
+        );
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // LOGO BURADA GÖRÜNECEK
+            Image.asset('assets/logo.png', width: 180),
+            const SizedBox(height: 30),
+            const CircularProgressIndicator(color: Color(0xFFF9D648)),
+            const SizedBox(height: 20),
+            const Text("AI ANALİZ MOTORU BAŞLATILIYOR...", 
+              style: TextStyle(color: Colors.white54, letterSpacing: 1.2, fontSize: 12)),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// --- ANA YAPI ---
 class MainShell extends StatefulWidget {
   const MainShell({super.key});
   @override
@@ -136,7 +179,7 @@ class CouponPredictionsPage extends StatelessWidget {
   }
 }
 
-// --- PREMIUM SAYFASI (Görsel 4 & 5'e Sadık) ---
+// --- PREMIUM SAYFASI ---
 class PremiumPage extends StatelessWidget {
   const PremiumPage({super.key});
   @override
@@ -164,7 +207,7 @@ class PremiumPage extends StatelessWidget {
   }
 }
 
-// --- PROFİL SAYFASI (Görsel 7'ye Sadık) ---
+// --- PROFİL SAYFASI ---
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
   @override
@@ -244,7 +287,12 @@ class _TopSearchBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Container(padding: const EdgeInsets.all(10), decoration: BoxDecoration(color: const Color(0xFF0F172A), borderRadius: BorderRadius.circular(12)), child: const Icon(Icons.sports_soccer, color: Color(0xFFF9D648))),
+        // LOGO BURADA GÖRÜNECEK
+        Container(
+          padding: const EdgeInsets.all(4),
+          decoration: BoxDecoration(color: const Color(0xFF0F172A), borderRadius: BorderRadius.circular(12)),
+          child: Image.asset('assets/logo.png', width: 32, height: 32), 
+        ),
         const SizedBox(width: 12),
         const Expanded(child: Text("Predict 1X2 AI", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18))),
         const Icon(Icons.notifications_none, color: Color(0xFFF9D648)),
