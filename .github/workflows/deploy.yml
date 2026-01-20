@@ -17,26 +17,30 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
         
-      - name: Configure project
-        run: flutter create . --platforms web,android
-        
-      # --- GÜVENLİK ADIMI: KOD KARARTMA İLE APK OLUŞTURMA ---
+      # ANDROID VE WEB KLASÖRLERİNİ SIFIRDAN YARATIYORUZ
+      - name: Configure Project
+        run: |
+          flutter create . --platforms android,web --force
+          
+      # ANDROID APK OLUŞTURMA
       - name: Build Android APK
-        run: flutter build apk --debug # Şimdilik hızlı deneme için debug APK yapıyoruz
+        run: flutter build apk --debug
         
-      # --- WEB SİTESİNİ YAYINLA ---
+      # WEB SİTESİNİ OLUŞTURMA
       - name: Build Web
         run: flutter build web --release --base-href "/1X2-AI-app/"
         
-      - name: Deploy to GitHub Pages
+      # WEB SİTESİNİ YAYINLA
+      - name: Deploy Web to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./build/web
 
-      # --- APK DOSYASINI İNDİRİLEBİLİR YAP ---
-      - name: Upload APK
+      # APK DOSYASINI GÜÇLÜ BİR ŞEKİLDE UPLOAD ET
+      - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: predict-1x2-ai-app
+          name: predict-ai-android-uygulamasi # İsim çok net olsun
           path: build/app/outputs/flutter-apk/app-debug.apk
+          if-no-files-found: error # Eğer dosya yoksa hata ver ki bilelim
