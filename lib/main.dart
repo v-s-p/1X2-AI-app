@@ -11,27 +11,30 @@ class PredictApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const deepNavy = Color(0xFF051125);
-    const goldAction = Color(0xFFFFD700);
+    // --- LOGONUN KENDİ LACİVERTİ VE ALTIN RENGİ ---
+    const brandNavy = Color(0xFF060B28); // Logo arka planındaki derin lacivert
+    const brandCard = Color(0xFF101636); // Kartlar için bir tık açık ton
+    const goldAction = Color(0xFFFFD700); // Parlak altın/sarı
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Predict 1X2 AI',
       theme: ThemeData(
         brightness: Brightness.dark,
-        scaffoldBackgroundColor: deepNavy,
+        scaffoldBackgroundColor: brandNavy,
         primaryColor: goldAction,
-        cardColor: const Color(0xFF0F2035),
+        cardColor: brandCard,
         textTheme: const TextTheme(
-          headlineLarge: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white),
+          headlineLarge: TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: Colors.white),
           headlineMedium: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: goldAction),
           bodyMedium: TextStyle(fontSize: 14, color: Color(0xFFB0BEC5)),
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             backgroundColor: goldAction,
-            foregroundColor: deepNavy,
+            foregroundColor: brandNavy,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            textStyle: const TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
       ),
@@ -40,11 +43,10 @@ class PredictApp extends StatelessWidget {
   }
 }
 
-// --- LOGO BİLEŞENİ (Center Crop Mantığı) ---
+// --- LOGO BİLEŞENİ (Center Crop - Sündürmeden) ---
 class BrandLogo extends StatelessWidget {
   final double size;
   final double radius;
-
   const BrandLogo({super.key, required this.size, this.radius = 12});
 
   @override
@@ -54,21 +56,20 @@ class BrandLogo extends StatelessWidget {
       height: size,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(radius),
-        border: Border.all(color: Colors.white10, width: 0.5),
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(radius),
         child: Image.asset(
-          'assets/logo.png', // Logo yolun
-          fit: BoxFit.cover,    // Kutuyu sündürmeden doldur
-          alignment: Alignment.center, // Ortaya odakla
+          'assets/logo.png',
+          fit: BoxFit.cover,
+          alignment: Alignment.center,
         ),
       ),
     );
   }
 }
 
-// --- 1. ADIM: ELITE SPLASH SCREEN ---
+// --- 1. ADIM: AÇILIŞ EKRANI (Metin Kaldırıldı) ---
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
   @override
@@ -93,10 +94,8 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const BrandLogo(size: 150, radius: 25), // Büyük Splash Logosu
-            const SizedBox(height: 25),
-            const Text('PREDICT 1X2 AI', style: TextStyle(color: Color(0xFFFFD700), fontSize: 22, fontWeight: FontWeight.w900, letterSpacing: 3)),
-            const SizedBox(height: 40),
+            const BrandLogo(size: 180, radius: 20), // Sadece logo
+            const SizedBox(height: 50),
             const CircularProgressIndicator(color: Color(0xFFFFD700), strokeWidth: 2),
           ],
         ),
@@ -105,26 +104,33 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 }
 
-// --- 2. ADIM: LOGIN EKRANI ---
+// --- 2. ADIM: GİRİŞ EKRANI (Predict Yazısı Kaldırıldı) ---
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(40.0),
+        padding: const EdgeInsets.symmetric(horizontal: 40.0),
         child: Column(
           children: [
+            const SizedBox(height: 100),
+            const BrandLogo(size: 120, radius: 20), // Logo tek başına parlıyor
             const SizedBox(height: 60),
-            const BrandLogo(size: 100, radius: 20), // Login Logosu
-            const SizedBox(height: 40),
-            const Text("Hoş Geldiniz", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 40),
             TextField(decoration: InputDecoration(hintText: "E-posta", filled: true, fillColor: Colors.white.withOpacity(0.05), border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none))),
             const SizedBox(height: 15),
             TextField(obscureText: true, decoration: InputDecoration(hintText: "Şifre", filled: true, fillColor: Colors.white.withOpacity(0.05), border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none))),
             const SizedBox(height: 30),
-            SizedBox(width: double.infinity, height: 55, child: ElevatedButton(onPressed: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const MainShell())), child: const Text("GİRİŞ YAP"))),
+            SizedBox(
+              width: double.infinity,
+              height: 55,
+              child: ElevatedButton(
+                onPressed: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const MainShell())),
+                child: const Text("GİRİŞ YAP"),
+              ),
+            ),
+            const SizedBox(height: 20),
+            const Text("Hesabınız yok mu? Kayıt Ol", style: TextStyle(color: Colors.grey, fontSize: 12)),
           ],
         ),
       ),
@@ -149,14 +155,14 @@ class _MainShellState extends State<MainShell> {
         currentIndex: _currentIndex,
         onTap: (index) => setState(() => _currentIndex = index),
         type: BottomNavigationBarType.fixed,
-        backgroundColor: const Color(0xFF051125),
+        backgroundColor: const Color(0xFF060B28),
         selectedItemColor: const Color(0xFFFFD700),
         unselectedItemColor: Colors.white24,
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.flash_on), label: 'Ana Sayfa'),
-          BottomNavigationBarItem(icon: Icon(Icons.auto_graph), label: 'Tahminler'),
+          BottomNavigationBarItem(icon: Icon(Icons.flash_on), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.auto_graph), label: 'Predictions'),
           BottomNavigationBarItem(icon: Icon(Icons.workspace_premium), label: 'Premium'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profil'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
       ),
       body: SafeArea(child: _pages[_currentIndex]),
@@ -164,7 +170,7 @@ class _MainShellState extends State<MainShell> {
   }
 }
 
-// --- ÜST BAR LOGO BİLEŞENİ ---
+// --- ÜST BAR (HER SAYFADA LOGO) ---
 class _TopBarHeader extends StatelessWidget {
   const _TopBarHeader();
   @override
@@ -172,18 +178,18 @@ class _TopBarHeader extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const BrandLogo(size: 40, radius: 8), // AppBar Logosu
+        const BrandLogo(size: 45, radius: 8), // Şık AppBar Logosu
         Row(children: [
           Icon(Icons.notifications_none_rounded, color: Colors.grey[400]),
           const SizedBox(width: 15),
-          const CircleAvatar(radius: 18, backgroundColor: Color(0xFF0F2035), child: Icon(Icons.person, size: 20, color: Color(0xFFFFD700))),
+          const CircleAvatar(radius: 18, backgroundColor: Color(0xFF101636), child: Icon(Icons.person, size: 20, color: Color(0xFFFFD700))),
         ])
       ],
     );
   }
 }
 
-// --- ANA SAYFA ---
+// --- SAYFA: ANA SAYFA ---
 class UpcomingMatchesPage extends StatelessWidget {
   const UpcomingMatchesPage({super.key});
   @override
@@ -204,7 +210,7 @@ class UpcomingMatchesPage extends StatelessWidget {
   }
 }
 
-// --- TAHMİNLER SAYFASI ---
+// --- SAYFA: TAHMİNLER ---
 class CouponPredictionsPage extends StatelessWidget {
   const CouponPredictionsPage({super.key});
   @override
@@ -216,7 +222,7 @@ class CouponPredictionsPage extends StatelessWidget {
         children: [
           const _TopBarHeader(),
           const SizedBox(height: 20),
-          Text('Spor Toto YZ Tahminleri', style: Theme.of(context).textTheme.headlineLarge),
+          Text('Spor Toto Tahminleri', style: Theme.of(context).textTheme.headlineLarge),
           const SizedBox(height: 20),
           FutureBuilder<List<CouponMatch>>(
             future: DemoData.loadMatchesFromJson(),
@@ -224,7 +230,7 @@ class CouponPredictionsPage extends StatelessWidget {
               final matches = snapshot.data ?? [];
               return Container(
                 padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(color: const Color(0xFF0F2035), borderRadius: BorderRadius.circular(12), border: Border.all(color: Colors.white10)),
+                decoration: BoxDecoration(color: const Color(0xFF101636), borderRadius: BorderRadius.circular(12), border: Border.all(color: Colors.white10)),
                 child: Column(children: matches.map((m) => CouponMatchRow(match: m)).toList()),
               );
             },
@@ -235,16 +241,20 @@ class CouponPredictionsPage extends StatelessWidget {
   }
 }
 
-// --- DİĞER SAYFALAR (Premium & Profil) ---
 class PremiumPage extends StatelessWidget {
   const PremiumPage({super.key});
   @override
-  Widget build(BuildContext context) { return const Center(child: Text("Premium Sayfası")); }
+  Widget build(BuildContext context) {
+    return const Padding(padding: EdgeInsets.all(16), child: Column(children: [_TopBarHeader(), Expanded(child: Center(child: Text("Premium Çok Yakında")))]));
+  }
 }
+
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
   @override
-  Widget build(BuildContext context) { return const Center(child: Text("Profil Sayfası")); }
+  Widget build(BuildContext context) {
+    return const Padding(padding: EdgeInsets.all(16), child: Column(children: [_TopBarHeader(), Expanded(child: Center(child: Text("Profil Sayfası")))]));
+  }
 }
 
 // --- KARTLAR VE SATIRLAR ---
@@ -255,7 +265,7 @@ class MatchCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(color: const Color(0xFF0F2035), borderRadius: BorderRadius.circular(12), border: Border.all(color: Colors.white10)),
+      decoration: BoxDecoration(color: const Color(0xFF101636), borderRadius: BorderRadius.circular(12), border: Border.all(color: Colors.white10)),
       child: Column(
         children: [
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
@@ -301,7 +311,7 @@ class DemoData {
       return data.map((m) => CouponMatch(index: m['id'], homeTeam: m['home'], awayTeam: m['away'], prediction: m['prediction'], isLocked: m['isLocked'])).toList();
     } catch (e) { return []; }
   }
-  static const List<String> premiumBenefits = ['Günlük VIP Tahminler', '%75 Başarı Oranı', 'Detaylı xG Analizleri', 'Tüm Dünya Ligleri', '7/24 Destek'];
+  static const List<String> premiumBenefits = ['VIP Tahminler', '%75 Başarı', 'Detaylı Analizler', '7/24 Destek'];
 }
 
 class MatchPrediction {
