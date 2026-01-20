@@ -3,11 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 void main() {
-  // Uygulama dikey modda sabit kalsın ve durum çubuğu şeffaf olsun
-  WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setSystemUIOverlayStyle(
-    const SystemUIOverlayStyle(statusBarColor: Colors.transparent),
-  );
   runApp(const PredictApp());
 }
 
@@ -34,9 +29,8 @@ class PredictApp extends StatelessWidget {
           headlineLarge: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white, letterSpacing: 0.5),
           headlineMedium: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: goldAction),
           bodyLarge: TextStyle(fontSize: 16, color: Colors.white),
-          bodyMedium: TextStyle(fontSize: 14, color: Color(0xFFB0BEC5)), // Gümüş gri (grey[400])
+          bodyMedium: TextStyle(fontSize: 14, color: Color(0xFFB0BEC5)), // Gümüş gri
         ),
-        // Buton Teması
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             backgroundColor: goldAction,
@@ -63,7 +57,8 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 4), () {
+    // 3 saniye logoyu göster ve login sayfasına geç
+    Future.delayed(const Duration(seconds: 3), () {
       if (mounted) {
         Navigator.pushReplacement(
           context,
@@ -87,8 +82,7 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Merkezi Logo Yerleşimi
-            Image.asset('assets/logo.png', width: 150),
+            Image.asset('assets/logo.png', width: 150), // Logo tam ortada
             const SizedBox(height: 20),
             const Text(
               'PREDICT 1X2 AI',
@@ -108,7 +102,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 }
 
-// --- 2. ADIM: LOGIN/REGISTER EKRANI ---
+// --- 2. ADIM: LOGIN EKRANI ---
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
   @override
@@ -119,13 +113,12 @@ class LoginScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset('assets/logo.png', height: 100),
+            Image.asset('assets/logo.png', height: 100), // Logo tepede
             const SizedBox(height: 40),
             const Text("Hoş Geldiniz", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
             const SizedBox(height: 10),
             const Text("Yapay zeka ile kazanmaya hazır mısınız?", style: TextStyle(color: Colors.grey)),
             const SizedBox(height: 40),
-            // Placeholder Giriş Alanı
             TextField(decoration: InputDecoration(hintText: "E-posta", filled: true, fillColor: Colors.white.withOpacity(0.05), border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none))),
             const SizedBox(height: 15),
             TextField(obscureText: true, decoration: InputDecoration(hintText: "Şifre", filled: true, fillColor: Colors.white.withOpacity(0.05), border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none))),
@@ -174,10 +167,10 @@ class _MainShellState extends State<MainShell> {
         showSelectedLabels: true,
         showUnselectedLabels: false,
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.flash_on_rounded), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.auto_graph_rounded), label: 'Predictions'),
+          BottomNavigationBarItem(icon: Icon(Icons.flash_on_rounded), label: 'Ana Sayfa'),
+          BottomNavigationBarItem(icon: Icon(Icons.auto_graph_rounded), label: 'Tahminler'),
           BottomNavigationBarItem(icon: Icon(Icons.workspace_premium_rounded), label: 'Premium'),
-          BottomNavigationBarItem(icon: Icon(Icons.person_rounded), label: 'Profile'),
+          BottomNavigationBarItem(icon: Icon(Icons.person_rounded), label: 'Profil'),
         ],
       ),
       body: SafeArea(child: _pages[_currentIndex]),
@@ -185,7 +178,7 @@ class _MainShellState extends State<MainShell> {
   }
 }
 
-// --- SAYFALAR: ANA SAYFA ---
+// --- ANA SAYFA ---
 class UpcomingMatchesPage extends StatelessWidget {
   const UpcomingMatchesPage({super.key});
   @override
@@ -300,10 +293,10 @@ class ProfilePage extends StatelessWidget {
             _StatItem(label: 'Başarı', value: '%66'),
           ]),
           const SizedBox(height: 40),
-          _ProfileListTile(title: 'Bildirimler', icon: Icons.notifications_none_rounded),
-          _ProfileListTile(title: 'Güvenlik', icon: Icons.security_rounded),
-          _ProfileListTile(title: 'Destek', icon: Icons.headset_mic_rounded),
-          _ProfileListTile(title: 'Çıkış', icon: Icons.logout_rounded, isExit: true),
+          const _ProfileListTile(title: 'Bildirimler', icon: Icons.notifications_none_rounded),
+          const _ProfileListTile(title: 'Güvenlik', icon: Icons.security_rounded),
+          const _ProfileListTile(title: 'Destek', icon: Icons.headset_mic_rounded),
+          const _ProfileListTile(title: 'Çıkış', icon: Icons.logout_rounded, isExit: true),
         ],
       ),
     );
