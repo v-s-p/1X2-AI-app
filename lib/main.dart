@@ -1,4 +1,4 @@
-import 'dart:ui';
+import 'dart:ui'; // Blur efekti için şart
 import 'package:flutter/material.dart';
 
 void main() {
@@ -10,21 +10,24 @@ class PredictApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const brandNavy = Color(0xFF051125); // Derin Lacivert
+    const goldPrimary = Color(0xFFC69C2D); // Altın
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Predict 1X2 AI',
       theme: ThemeData(
         brightness: Brightness.dark,
-        scaffoldBackgroundColor: const Color(0xFF051125),
-        primaryColor: const Color(0xFFC69C2D),
-        cardColor: const Color(0xFF0F2035),
+        scaffoldBackgroundColor: brandNavy,
+        primaryColor: goldPrimary,
+        fontFamily: 'Roboto', 
+        useMaterial3: true,
       ),
       home: const MainShell(),
     );
   }
 }
 
-// --- ANA NAVİGASYON MERKEZİ ---
 class MainShell extends StatefulWidget {
   const MainShell({super.key});
   @override
@@ -32,130 +35,170 @@ class MainShell extends StatefulWidget {
 }
 
 class _MainShellState extends State<MainShell> {
-  int _selectedIndex = 0;
-
-  // Sayfaları burada tanımlıyoruz
-  final List<Widget> _pages = [
-    const HomePage(),        // Maç Listesi ve Tablar
-    const PredictionsPage(), // Banko ve Sihirli Kupon
-    const PremiumPage(),     // Satış Ekranı
-    const ProfilePage(),     // Kullanıcı Ayarları
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: IndexedStack( // Sayfa durumlarını korumak için IndexedStack
-        index: _selectedIndex,
-        children: _pages,
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: (index) => setState(() => _selectedIndex = index),
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: const Color(0xFF051125),
-        selectedItemColor: const Color(0xFFC69C2D),
-        unselectedItemColor: Colors.white24,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.flash_on), label: 'Ana Sayfa'),
-          BottomNavigationBarItem(icon: Icon(Icons.auto_graph), label: 'Analiz'),
-          BottomNavigationBarItem(icon: Icon(Icons.workspace_premium), label: 'Premium'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profil'),
-        ],
-      ),
-    );
-  }
-}
-
-// ==========================================
-// 1. ANA SAYFA (MAÇ LİSTESİ VE TABLAR)
-// ==========================================
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  int _currentIndex = 0;
+  bool isPremium = false; // Test: FALSE (Kilitli maçları gör)
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
+        // APP BAR TASARIMI
         appBar: AppBar(
           backgroundColor: const Color(0xFF051125),
           elevation: 0,
-          title: Image.asset('assets/logo.png', height: 35),
+          title: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+               // Logo yoksa hata vermesin diye Icon koydum, varsa Image.asset kullan
+               const Icon(Icons.sports_soccer, color: Color(0xFFC69C2D), size: 28), 
+               const SizedBox(width: 8),
+               Text("PREDICT 1X2 AI", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18, letterSpacing: 1.2)),
+            ],
+          ),
           centerTitle: true,
-          bottom: const TabBar(
-            indicatorColor: Color(0xFFC69C2D),
-            labelColor: Color(0xFFC69C2D),
-            unselectedLabelColor: Colors.white24,
-            tabs: [Tab(text: "Hepsi"), Tab(text: "Canlı"), Tab(text: "Biten")],
+          actions: const [
+            Icon(Icons.notifications_none, color: Color(0xFFC69C2D)),
+            SizedBox(width: 15),
+          ],
+          bottom: TabBar(
+            indicatorColor: const Color(0xFFC69C2D),
+            labelColor: const Color(0xFFC69C2D),
+            unselectedLabelColor: Colors.grey,
+            indicatorWeight: 3,
+            labelStyle: const TextStyle(fontWeight: FontWeight.bold),
+            tabs: const [
+              Tab(text: "BÜLTEN"),
+              Tab(text: "CANLI"),
+              Tab(text: "BİTEN"),
+            ],
           ),
         ),
-        body: TabBarView(
-          children: [
-            _buildMatchList(context),
-            _buildEmptyCanli(),
-            const Center(child: Text("Biten maç kaydı yok.")),
+        
+        // GÖVDE
+        body: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [Color(0xFF051125), Color(0xFF02060D)], // Hafif geçiş
+            )
+          ),
+          child: TabBarView(
+            children: [
+              _buildHepsiTab(),
+              _buildCanliTab(),
+              _buildBitenTab(),
+            ],
+          ),
+        ),
+
+        // ALT MENÜ
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: _currentIndex,
+          onTap: (index) => setState(() => _currentIndex = index),
+          type: BottomNavigationBarType.fixed,
+          backgroundColor: const Color(0xFF0F2035),
+          selectedItemColor: const Color(0xFFC69C2D),
+          unselectedItemColor: Colors.grey,
+          showUnselectedLabels: false,
+          items: const [
+            BottomNavigationBarItem(icon: Icon(Icons.home_filled), label: 'Ana Sayfa'),
+            BottomNavigationBarItem(icon: Icon(Icons.analytics_outlined), label: 'Analiz'),
+            BottomNavigationBarItem(icon: Icon(Icons.workspace_premium), label: 'Premium'),
+            BottomNavigationBarItem(icon: Icon(Icons.person_outline), label: 'Profil'),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildMatchList(BuildContext context) {
+  // --- HEPSİ SEKİMESİ (FREEMIUM LİSTE) ---
+  Widget _buildHepsiTab() {
+    final matches = DemoData.excelMatches;
     return ListView.builder(
       padding: const EdgeInsets.all(16),
-      itemCount: DemoData.excelMatches.length,
+      itemCount: matches.length,
       itemBuilder: (context, index) {
-        bool isLocked = index >= 2; // İlk 2 maç açık, kalanlar kilitli
+        // İLK 2 MAÇ AÇIK, GERİSİ KİLİTLİ
+        bool isLocked = index >= 2 && !isPremium; 
+        
         return GestureDetector(
           onTap: () => isLocked ? _showPremiumSheet(context) : null,
           child: Padding(
-            padding: const EdgeInsets.only(bottom: 12),
-            child: MatchCardElite(match: DemoData.excelMatches[index], isLocked: isLocked),
+            padding: const EdgeInsets.only(bottom: 16),
+            child: MatchCardElite(match: matches[index], isLocked: isLocked),
           ),
         );
       },
     );
   }
 
-  Widget _buildEmptyCanli() {
+  // --- CANLI SEKİMESİ ---
+  Widget _buildCanliTab() {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.stadium_rounded, size: 80, color: Colors.white.withOpacity(0.05)),
-          const SizedBox(height: 15),
-          const Text("Şu an çimler sessiz...", style: TextStyle(fontSize: 18, color: Color(0xFFC69C2D), fontWeight: FontWeight.bold)),
-          const Text("Ama fırtına yaklaşıyor!", style: TextStyle(color: Colors.white24)),
+          Icon(Icons.stadium, size: 80, color: Colors.white.withOpacity(0.05)),
+          const SizedBox(height: 20),
+          const Text(
+            "Sahalar Sessiz...",
+            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xFFC69C2D)),
+          ),
+          const SizedBox(height: 8),
+          const Text(
+            "Şu an oynanan maç yok.\nFırtına birazdan kopacak!",
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.white38),
+          ),
         ],
       ),
     );
   }
 
+  Widget _buildBitenTab() {
+    return const Center(child: Text("Biten maç bulunamadı.", style: TextStyle(color: Colors.white54)));
+  }
+
+  // --- PREMIUM BOTTOM SHEET (AÇILIR PENCERE) ---
   void _showPremiumSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
       backgroundColor: const Color(0xFF0F2035),
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
-      builder: (context) => Padding(
-        padding: const EdgeInsets.all(30),
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(25))),
+      builder: (context) => Container(
+        padding: const EdgeInsets.all(32),
+        height: 400,
         child: Column(
-          mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.lock_open_rounded, color: Color(0xFFC69C2D), size: 50),
+            Container(width: 50, height: 5, decoration: BoxDecoration(color: Colors.white10, borderRadius: BorderRadius.circular(10))),
+            const SizedBox(height: 30),
+            const Icon(Icons.lock_open_rounded, color: Color(0xFFC69C2D), size: 60),
             const SizedBox(height: 20),
-            const Text("Premium ile Tüm Kapıları Aç!", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 10),
-            const Text("Haftalık 15 maçın tamamını ve AI güven skorlarını görmek için hemen yükselt.", textAlign: TextAlign.center, style: TextStyle(color: Colors.white60)),
-            const SizedBox(height: 30),
+            const Text("Analizin Kilidini Aç", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white)),
+            const SizedBox(height: 12),
+            const Text(
+              "Bu maçın yapay zeka tahminini, güven skorunu ve risk analizini görmek için Premium'a geç.",
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.white60, height: 1.5),
+            ),
+            const Spacer(),
             SizedBox(
-              width: double.infinity, height: 50,
+              width: double.infinity,
+              height: 55,
               child: ElevatedButton(
-                style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFFC69C2D), foregroundColor: Colors.black),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFFC69C2D),
+                  foregroundColor: Colors.black,
+                  elevation: 10,
+                  shadowColor: const Color(0xFFC69C2D).withOpacity(0.4),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16))
+                ),
                 onPressed: () => Navigator.pop(context),
-                child: const Text("PAKETLERİ GÖR"),
+                child: const Text("HEMEN YÜKSELT", style: TextStyle(fontWeight: FontWeight.w900, fontSize: 16)),
               ),
-            ),
+            )
           ],
         ),
       ),
@@ -163,218 +206,88 @@ class HomePage extends StatelessWidget {
   }
 }
 
-// ==========================================
-// 2. TAHMİN / ANALİZ SAYFASI
-// ==========================================
-class PredictionsPage extends StatelessWidget {
-  const PredictionsPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: 20),
-          const Text("Analiz Merkezi", style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 20),
-          // HAFTANIN BANKOSU
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(colors: [Color(0xFFC69C2D), Color(0xFF8E6E1A)]),
-              borderRadius: BorderRadius.circular(15),
-            ),
-            child: const Column(
-              children: [
-                Text("HAFTANIN BANKOSU", style: TextStyle(color: Colors.black, fontWeight: FontWeight.w900, letterSpacing: 2)),
-                SizedBox(height: 15),
-                Text("Fenerbahçe - Göztepe", style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold)),
-                Text("Tahmin: 1 (Güven: %94)", style: TextStyle(color: Colors.black87, fontWeight: FontWeight.w600)),
-              ],
-            ),
-          ),
-          const SizedBox(height: 30),
-          // SİHİRLİ KUPON BUTONU
-          SizedBox(
-            width: double.infinity, height: 65,
-            child: OutlinedButton.icon(
-              style: OutlinedButton.styleFrom(
-                side: const BorderSide(color: Color(0xFFC69C2D), width: 2),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-              ),
-              icon: const Icon(Icons.auto_fix_high_rounded, color: Color(0xFFC69C2D)),
-              label: const Text("YAPAY ZEKA KUPON OLUŞTUR", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-              onPressed: () {},
-            ),
-          ),
-          const SizedBox(height: 40),
-          // SON KAZANANLAR TICKER (Simüle edilmiş)
-          const Text("SON KAZANANLAR", style: TextStyle(fontSize: 12, color: Colors.white38, letterSpacing: 1)),
-          const SizedBox(height: 10),
-          Container(
-            height: 40,
-            color: Colors.white.withOpacity(0.02),
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: const [
-                Center(child: Text("  🏆 Kullanıcı k***n 12.450₺ Kazandı!  •  🏆 Kullanıcı m***t 4.200₺ Kazandı!  •  🏆 AI Kuponu %100 Başarı!  ", style: TextStyle(color: Color(0xFFC69C2D)))),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// ==========================================
-// 3. PREMIUM SAYFASI (STOREFRONT)
-// ==========================================
-class PremiumPage extends StatelessWidget {
-  const PremiumPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            const Icon(Icons.stars_rounded, color: Color(0xFFC69C2D), size: 70),
-            const SizedBox(height: 10),
-            const Text("Elite Üyeliğe Geç", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 30),
-            // HAFTALIK PAKET
-            _buildPriceCard("Haftalık Paket", "59₺", "Hızlı Başlangıç", false),
-            const SizedBox(height: 15),
-            // AYLIK PAKET (EN POPÜLER)
-            _buildPriceCard("Aylık Paket", "199₺", "En Popüler", true),
-            const SizedBox(height: 40),
-            // NEDEN PREMIUM?
-            const Align(alignment: Alignment.centerLeft, child: Text("Neden Premium?", style: TextStyle(fontWeight: FontWeight.bold))),
-            const SizedBox(height: 15),
-            _buildBenefit("15 Maçın tamamına AI erişimi"),
-            _buildBenefit("Yüksek güvenli 'Banko' maçlar"),
-            _buildBenefit("Reklamsız tertemiz deneyim"),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildPriceCard(String title, String price, String badge, bool isPopular) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: const Color(0xFF0F2035),
-        borderRadius: BorderRadius.circular(15),
-        border: Border.all(color: isPopular ? const Color(0xFFC69C2D) : Colors.white10, width: isPopular ? 2 : 1),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-              Text(badge, style: TextStyle(color: isPopular ? const Color(0xFFC69C2D) : Colors.white38, fontSize: 12)),
-            ],
-          ),
-          Text(price, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xFFC69C2D))),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildBenefit(String text) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: Row(children: [const Icon(Icons.check_circle, color: Color(0xFFC69C2D), size: 18), const SizedBox(width: 10), Text(text)]),
-    );
-  }
-}
-
-// ==========================================
-// 4. PROFİL SAYFASI
-// ==========================================
-class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(30),
-      child: Column(
-        children: [
-          const SizedBox(height: 40),
-          const CircleAvatar(radius: 50, backgroundColor: Color(0xFF0F2035), child: Icon(Icons.person, size: 60, color: Color(0xFFC69C2D))),
-          const SizedBox(height: 15),
-          const Text("Mert Yılmaz", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 8),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-            decoration: BoxDecoration(color: Colors.white.withOpacity(0.05), borderRadius: BorderRadius.circular(20)),
-            child: const Text("Üyelik Durumu: FREE", style: TextStyle(color: Colors.white54, fontSize: 12)),
-          ),
-          const SizedBox(height: 40),
-          _buildProfileTile(Icons.notifications_outlined, "Bildirimler"),
-          _buildProfileTile(Icons.support_agent_rounded, "Destek Al"),
-          _buildProfileTile(Icons.logout_rounded, "Çıkış Yap", isRed: true),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildProfileTile(IconData icon, String title, {bool isRed = false}) {
-    return ListTile(
-      leading: Icon(icon, color: isRed ? Colors.redAccent : const Color(0xFFC69C2D)),
-      title: Text(title, style: TextStyle(color: isRed ? Colors.redAccent : Colors.white)),
-      trailing: const Icon(Icons.chevron_right_rounded, color: Colors.white10),
-      onTap: () {},
-    );
-  }
-}
-
-// --- YARDIMCI BİLEŞENLER (MAÇ KARTI) ---
+// --- ELITE MAÇ KARTI (GÖRSEL DÜZELTİLDİ) ---
 class MatchCardElite extends StatelessWidget {
   final Map<String, String> match;
   final bool isLocked;
+
   const MatchCardElite({super.key, required this.match, required this.isLocked});
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
+        // 1. KARTIN KENDİSİ
         Container(
-          padding: const EdgeInsets.all(18),
-          decoration: BoxDecoration(color: const Color(0xFF0F2035), borderRadius: BorderRadius.circular(12), border: Border.all(color: Colors.white10)),
+          padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+          decoration: BoxDecoration(
+            color: const Color(0xFF0F2035), // Kart Rengi
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: Colors.white.withOpacity(0.05)),
+            boxShadow: [
+              BoxShadow(color: Colors.black.withOpacity(0.3), blurRadius: 10, offset: const Offset(0, 5))
+            ]
+          ),
           child: Column(
             children: [
+              // LİG / TARİH BİLGİSİ
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                decoration: BoxDecoration(color: Colors.black26, borderRadius: BorderRadius.circular(8)),
+                child: Text(match['date']!, style: const TextStyle(fontSize: 11, color: Colors.white54, fontWeight: FontWeight.bold)),
+              ),
+              const SizedBox(height: 16),
+
+              // TAKIMLAR VE SKOR ALANI
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Expanded(child: Text(match['home']!, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13))),
-                  const Text("VS", style: TextStyle(color: Color(0xFFC69C2D), fontWeight: FontWeight.w900)),
-                  Expanded(child: Text(match['away']!, textAlign: TextAlign.end, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13))),
+                  // EV SAHİBİ
+                  Expanded(child: _buildTeamItem(match['home']!, true)),
+                  
+                  // VS / SKOR ALANI
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Column(
+                      children: [
+                         const Text("VS", style: TextStyle(color: Color(0xFFC69C2D), fontWeight: FontWeight.w900, fontSize: 18)),
+                         if(!isLocked) // Sadece kilit açıkken oran gösterelim
+                            const Padding(
+                              padding: EdgeInsets.only(top: 4),
+                              child: Text("%76", style: TextStyle(color: Colors.greenAccent, fontSize: 12, fontWeight: FontWeight.bold)),
+                            )
+                      ],
+                    ),
+                  ),
+
+                  // DEPLASMAN
+                  Expanded(child: _buildTeamItem(match['away']!, false)),
                 ],
               ),
-              const SizedBox(height: 10),
-              Text(match['date']!, style: const TextStyle(fontSize: 11, color: Colors.white24)),
             ],
           ),
         ),
+        
+        // 2. KİLİT VE BLUR KATMANI (Buzlu Cam)
         if (isLocked)
           Positioned.fill(
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(16),
               child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                filter: ImageFilter.blur(sigmaX: 6.0, sigmaY: 6.0), // Bulanıklık şiddeti
                 child: Container(
-                  color: Colors.black.withOpacity(0.4),
-                  child: const Center(child: Icon(Icons.lock_rounded, color: Color(0xFFC69C2D), size: 30)),
+                  color: const Color(0xFF051125).withOpacity(0.5), // Yarı saydam lacivert perde
+                  child: Center(
+                    child: Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.black.withOpacity(0.6),
+                        border: Border.all(color: const Color(0xFFC69C2D), width: 2)
+                      ),
+                      child: const Icon(Icons.lock, color: Color(0xFFC69C2D), size: 24),
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -382,9 +295,39 @@ class MatchCardElite extends StatelessWidget {
       ],
     );
   }
+
+  // Takım İsim + Avatar Oluşturucu
+  Widget _buildTeamItem(String name, bool isHome) {
+    return Column(
+      children: [
+        // Daire içinde takımın baş harfi (Logo yerine geçici çözüm)
+        Container(
+          width: 50, height: 50,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            gradient: LinearGradient(
+              colors: isHome 
+                ? [Colors.blueAccent.shade700, Colors.blue.shade900] 
+                : [Colors.redAccent.shade700, Colors.red.shade900],
+              begin: Alignment.topLeft, end: Alignment.bottomRight
+            ),
+            boxShadow: [BoxShadow(color: Colors.black45, blurRadius: 5, offset: Offset(0,2))]
+          ),
+          child: Center(child: Text(name[0], style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white))),
+        ),
+        const SizedBox(height: 10),
+        Text(
+          name, 
+          textAlign: TextAlign.center,
+          maxLines: 2,
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Colors.white)
+        ),
+      ],
+    );
+  }
 }
 
-// --- VERİ ---
+// --- DUMMY DATA (HATA VERMEMESİ İÇİN AYNI VERİ) ---
 class DemoData {
   static const List<Map<String, String>> excelMatches = [
     {"home": "Trabzonspor", "away": "Kasımpaşa", "date": "23.01.2026 - 20:00"},
@@ -392,15 +335,7 @@ class DemoData {
     {"home": "Samsunspor", "away": "Kocaelispor", "date": "24.01.2026 - 17:00"},
     {"home": "Karagümrük", "away": "Galatasaray", "date": "24.01.2026 - 20:00"},
     {"home": "Gaziantep FK", "away": "Konyaspor", "date": "25.01.2026 - 14:30"},
-    {"home": "Antalyaspor", "away": "Gençlerbirliği", "date": "25.01.2026 - 17:00"},
-    {"home": "Rizespor", "away": "Alanyaspor", "date": "25.01.2026 - 17:00"},
     {"home": "Fenerbahçe", "away": "Göztepe", "date": "25.01.2026 - 20:00"},
-    {"home": "Eyüpspor", "away": "Beşiktaş", "date": "26.01.2026 - 20:00"},
-    {"home": "Union Berlin", "away": "Dortmund", "date": "24.01.2026 - 20:30"},
-    {"home": "Marsilya", "away": "Lens", "date": "24.01.2026 - 23:05"},
-    {"home": "Arsenal", "away": "Man. United", "date": "25.01.2026 - 19:30"},
-    {"home": "Villarreal", "away": "Real Madrid", "date": "24.01.2026 - 23:00"},
     {"home": "Juventus", "away": "Napoli", "date": "25.01.2026 - 20:00"},
-    {"home": "Roma", "away": "AC Milan", "date": "25.01.2026 - 22:45"},
   ];
 }
