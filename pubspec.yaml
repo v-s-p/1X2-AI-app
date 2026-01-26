@@ -13,9 +13,12 @@ dependencies:
   percent_indicator: ^4.2.3
   http: ^1.1.0
   intl: ^0.19.0
+<<<<<<< HEAD
   google_generative_ai: ^0.4.0
   flutter_dotenv: ^5.1.0
   path_provider: ^2.1.0
+=======
+>>>>>>> a8297b3afbe621e9f100c706f65758136bf61083
 
 dev_dependencies:
   flutter_test:
@@ -27,4 +30,7 @@ flutter:
   assets:
     - assets/logo.png  # Burası görseldeki logonun yolu olmalı
     - assets/matches_data.json  # Bunu mutlaka ekle!
+<<<<<<< HEAD
     - assets/.env
+=======
+>>>>>>> a8297b3afbe621e9f100c706f65758136bf61083
