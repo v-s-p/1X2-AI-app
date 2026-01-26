@@ -1,0 +1,51 @@
+name: Predict AI Build and Deploy
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      # ANDROID İÇİN JAVA KURULUMU ŞART
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          
+      - name: Install dependencies
+        run: flutter pub get
+        
+      # EKSİK ANDROID VE WEB DOSYALARINI OLUŞTURUYORUZ
+      - name: Create Platform Folders
+        run: flutter create . --platforms android,web
+        
+      # ANDROID APK OLUŞTURMA (Debug Modu)
+      - name: Build Android APK
+        run: flutter build apk --debug
+        
+      # WEB SİTESİNİ OLUŞTURMA
+      - name: Build Web
+        run: flutter build web --release --base-href "/1X2-AI-app/"
+        
+      # WEB SİTESİNİ YAYINLA
+      - name: Deploy Web to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build/web
+
+      # APK DOSYASINI YÜKLE
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: predict-ai-android-apk
+          path: build/app/outputs/flutter-apk/app-debug.apk

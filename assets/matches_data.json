@@ -1,0 +1,246 @@
+{
+    "generated_at": "2026-01-22 16:40:00",
+    "total_cost": 320,
+    "matches": [
+        {
+            "id": 1,
+            "home": "Trabzonspor",
+            "away": "Kasımpaşa",
+            "date": "23.01.2026",
+            "prediction": "1",
+            "confidence": 78,
+            "probabilities": {
+                "1": 55,
+                "X": 25,
+                "2": 20
+            },
+            "reasoning": "Trabzonspor evinde yeni sezona fırtına gibi başladı. Kasımpaşa'nın defansif zaaflarını kaliteli hücum hattıyla cezalandıracaktır.",
+            "play_type": "Single",
+            "final_play": "1"
+        },
+        {
+            "id": 2,
+            "home": "Zecorner Kayserispor",
+            "away": "Rams Başakşehir",
+            "date": "24.01.2026",
+            "prediction": "2",
+            "confidence": 62,
+            "probabilities": {
+                "1": 20,
+                "X": 35,
+                "2": 45
+            },
+            "reasoning": "Başakşehir'in taktiksel üstünlüğü ve Kayserispor'daki kadro daralması deplasman ekibini avantajlı kılıyor. Ancak beraberlik ihtimali de diri.",
+            "play_type": "Double Chance",
+            "final_play": "X-2"
+        },
+        {
+            "id": 3,
+            "home": "Samsunspor",
+            "away": "Kocaelispor",
+            "date": "24.01.2026",
+            "prediction": "1",
+            "confidence": 72,
+            "probabilities": {
+                "1": 48,
+                "X": 30,
+                "2": 22
+            },
+            "reasoning": "Samsunspor taraftarı önünde çok daha baskın. Kocaelispor deplasmanda skor üretmekte zorlanıyor.",
+            "play_type": "Single",
+            "final_play": "1"
+        },
+        {
+            "id": 4,
+            "home": "Fatih Karagümrük",
+            "away": "Galatasaray",
+            "date": "24.01.2026",
+            "prediction": "2",
+            "confidence": 88,
+            "probabilities": {
+                "1": 10,
+                "X": 20,
+                "2": 70
+            },
+            "reasoning": "Galatasaray'ın yıldızlar topluluğu kadrosu ve şampiyonluk yolundaki kararlılığı, Karagümrük engelini kayıpsız geçmesini sağlayacaktır.",
+            "play_type": "Single",
+            "final_play": "2"
+        },
+        {
+            "id": 5,
+            "home": "Gaziantep FK",
+            "away": "Tümosan Konyaspor",
+            "date": "25.01.2026",
+            "prediction": "X",
+            "confidence": 58,
+            "probabilities": {
+                "1": 30,
+                "X": 45,
+                "2": 25
+            },
+            "reasoning": "İki orta sıra ekibinin mücadelesinde defansif kurgular ön planda olacaktır. Pozisyonu az, beraberliği bol bir maç bekliyoruz.",
+            "play_type": "Double Chance",
+            "final_play": "1-X"
+        },
+        {
+            "id": 6,
+            "home": "Hesap.com Antalyaspor",
+            "away": "Gençlerbirliği",
+            "date": "25.01.2026",
+            "prediction": "1",
+            "confidence": 70,
+            "probabilities": {
+                "1": 50,
+                "X": 30,
+                "2": 20
+            },
+            "reasoning": "Antalyaspor iç sahada etkili bir performans sergiliyor. Gençlerbirliği'nin kontra atak stratejisi bu kez yetersiz kalabilir.",
+            "play_type": "Single",
+            "final_play": "1"
+        },
+        {
+            "id": 7,
+            "home": "Çaykur Rizespor",
+            "away": "Corendon Alanyaspor",
+            "date": "25.01.2026",
+            "prediction": "1",
+            "confidence": 65,
+            "probabilities": {
+                "1": 45,
+                "X": 35,
+                "2": 20
+            },
+            "reasoning": "Karadeniz ekibi Rizespor evinde dirençli. Alanyaspor'un dış sahadaki dengesiz formu ev sahibini bir adım öne çıkarıyor.",
+            "play_type": "Single",
+            "final_play": "1"
+        },
+        {
+            "id": 8,
+            "home": "Fenerbahçe",
+            "away": "Göztepe",
+            "date": "25.01.2026",
+            "prediction": "1",
+            "confidence": 95,
+            "probabilities": {
+                "1": 85,
+                "X": 10,
+                "2": 5
+            },
+            "reasoning": "Fenerbahçe şampiyonluğun en büyük adayı. Göztepe karşısında hata payı sıfır ve Kadıköy'de gol olup yağmaları muhtemel.",
+            "play_type": "Single",
+            "final_play": "1"
+        },
+        {
+            "id": 9,
+            "home": "ikas Eyüpspor",
+            "away": "Beşiktaş",
+            "date": "26.01.2026",
+            "prediction": "2",
+            "confidence": 68,
+            "probabilities": {
+                "1": 20,
+                "X": 30,
+                "2": 50
+            },
+            "reasoning": "Beşiktaş'ın tecrübesi ve Eyüpspor'un savunma arkası boşlukları, Kartal'ın galibiyete uzanmasını sağlayacaktır.",
+            "play_type": "Single",
+            "final_play": "2"
+        },
+        {
+            "id": 10,
+            "home": "Union Berlin",
+            "away": "Borussia Dortmund",
+            "date": "24.01.2026",
+            "prediction": "2",
+            "confidence": 64,
+            "probabilities": {
+                "1": 25,
+                "X": 30,
+                "2": 45
+            },
+            "reasoning": "Dortmund deplasmanda olsa da hücum hattı Union Berlin'in katı savunmasını delmeye yetecek kapasitede.",
+            "play_type": "Double Chance",
+            "final_play": "X-2"
+        },
+        {
+            "id": 11,
+            "home": "Marsilya",
+            "away": "Lens",
+            "date": "24.01.2026",
+            "prediction": "1",
+            "confidence": 71,
+            "probabilities": {
+                "1": 50,
+                "X": 30,
+                "2": 20
+            },
+            "reasoning": "Marsilya'nın Velodrome atmosferi her rakip için cehennemdir. Lens'in bu baskı altında hata yapması bekleniyor.",
+            "play_type": "Single",
+            "final_play": "1"
+        },
+        {
+            "id": 12,
+            "home": "Arsenal",
+            "away": "Manchester United",
+            "date": "25.01.2026",
+            "prediction": "1",
+            "confidence": 75,
+            "probabilities": {
+                "1": 50,
+                "X": 30,
+                "2": 20
+            },
+            "reasoning": "Londra derbisinde Arsenal'in hücum zenginliği ve United'ın orta sahadaki boşlukları maçın kaderini ev sahibine çevirecektir.",
+            "play_type": "Double Chance",
+            "final_play": "1-X"
+        },
+        {
+            "id": 13,
+            "home": "Villarreal",
+            "away": "Real Madrid",
+            "date": "24.01.2026",
+            "prediction": "2",
+            "confidence": 82,
+            "probabilities": {
+                "1": 15,
+                "X": 20,
+                "2": 65
+            },
+            "reasoning": "Real Madrid formunun zirvesinde. Villarreal direnç gösterse de Madrid'in bitiriciliği farkı yaratacaktır.",
+            "play_type": "Single",
+            "final_play": "2"
+        },
+        {
+            "id": 14,
+            "home": "Juventus",
+            "away": "Napoli",
+            "date": "25.01.2026",
+            "prediction": "X",
+            "confidence": 55,
+            "probabilities": {
+                "1": 35,
+                "X": 40,
+                "2": 25
+            },
+            "reasoning": "İtalya derbisinde iki takım da kaybetmemek üzere sahaya çıkacaktır. Taktik savaşı beraberlikle sonuçlanabilir.",
+            "play_type": "Double Chance",
+            "final_play": "1-X"
+        },
+        {
+            "id": 15,
+            "home": "Roma",
+            "away": "Milan",
+            "date": "25.01.2026",
+            "prediction": "2",
+            "confidence": 60,
+            "probabilities": {
+                "1": 25,
+                "X": 35,
+                "2": 40
+            },
+            "reasoning": "Milan'ın dinamik yapısı Roma'nın ağır savunmasına zor anlar yaşatacaktır. Deplasman galibiyeti sürpriz olmaz.",
+            "play_type": "Single",
+            "final_play": "2"
+        }
+    ]
+}

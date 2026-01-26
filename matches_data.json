@@ -1,0 +1,74 @@
+{
+    "generated_at": "2026-01-22 10:15:00",
+    "total_cost": 320,
+    "matches": [
+        {
+            "id": 1,
+            "home": "Trabzonspor",
+            "away": "Kasımpaşa",
+            "date": "23.01.2026",
+            "prediction": "X",
+            "confidence": 65,
+            "probabilities": {
+                "1": 30,
+                "X": 40,
+                "2": 30
+            },
+            "risk_factor": "YÜKSEK: Yönetim istifası ve maaş gecikmeleri",
+            "reasoning": "Trabzonspor evinde güçlü olsa da, son hafta yaşanan yönetim krizi ve futbolcuların antrenmana geç çıkması motivasyonu düşürdü. Kasımpaşa bu kaostan puan çıkarabilir.",
+            "play_type": "Assumption (1-Only)",
+            "final_play": "X"
+        },
+        {
+            "id": 2,
+            "home": "Kayserispor",
+            "away": "Başakşehir",
+            "date": "24.01.2026",
+            "prediction": "2",
+            "confidence": 75,
+            "probabilities": {
+                "1": 20,
+                "X": 25,
+                "2": 55
+            },
+            "risk_factor": "DÜŞÜK: Başakşehir formda",
+            "reasoning": "Başakşehir Avrupa hedefine kilitlendi. Kayserispor'da önemli eksikler var.",
+            "play_type": "Assumption (1-Only)",
+            "final_play": "2"
+        },
+        {
+            "id": 12,
+            "home": "Arsenal",
+            "away": "Man United",
+            "date": "25.01.2026",
+            "prediction": "1",
+            "confidence": 80,
+            "probabilities": {
+                "1": 55,
+                "X": 25,
+                "2": 20
+            },
+            "risk_factor": "ORTA: Arsenal eksikleri var",
+            "reasoning": "Londra derbisinde Arsenal favori ancak defans hattındaki sakatlıklar (Insider Info: Gabriel son idmana çıkmadı) risk yaratıyor. Yine de iç saha avantajı ağır basıyor.",
+            "play_type": "Double Chance",
+            "final_play": "1-X"
+        },
+        {
+            "id": 8,
+            "home": "Fenerbahçe",
+            "away": "Göztepe",
+            "date": "25.01.2026",
+            "prediction": "1",
+            "confidence": 90,
+            "probabilities": {
+                "1": 70,
+                "X": 20,
+                "2": 10
+            },
+            "risk_factor": "YOK: Tam Motivasyon",
+            "reasoning": "Fenerbahçe şampiyonluk yolunda hata yapmaz. Oyuncular ve taraftar kenetlenmiş durumda. Finansal veya idari bir sorun görünmüyor.",
+            "play_type": "Assumption (1-Only)",
+            "final_play": "1"
+        }
+    ]
+}
